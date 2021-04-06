@@ -37,26 +37,10 @@ function leoPurchasingSimulation(node){
 	console.log("leoPurchasingSimulation",source, productId, idType)
 	
 	if(source === 'amazon') {
-		var transactionId = "AmazonTest_"+ new Date().getTime();
+		var transactionId = "AmazonLeoCdpDemo_"+ new Date().getTime();
 		var purchasedItems = [{"itemtId": productId, "idType" : idType, quantity : 1}];
-		var transactionValue = jQuery("#buybox > div > table > tbody > tr.kindle-price > td.a-color-price.a-size-medium.a-align-bottom > span").text().trim().replace('$','');
-		if(transactionValue === ''){
-			transactionValue = jQuery('#mediaNoAccordion > div.a-row > div.a-column.a-span4.a-text-right.a-span-last > span.a-size-medium.a-color-price.header-price').text().trim().replace('$','');
-		}
-		if(transactionValue === ''){
-			transactionValue = jQuery('#newBuyBoxPrice').text().trim().replace('$','');
-		}
-		if(transactionValue === ''){
-			transactionValue = jQuery('#price').text().trim().replace('$','');
-		}
 		
-		if(transactionValue !== ''){
-			var transactionValue = parseFloat(transactionValue);
-			var currencyCode = "USD";
-			leoTrackEventOnlinePurchasedOK(transactionId, purchasedItems, transactionValue, currencyCode);
-		} else {
-			console.error('transactionValue is empty');
-		}
+		leoTrackEventOnlinePurchasedOK(transactionId, purchasedItems);
 	}
 }
 
@@ -194,6 +178,31 @@ function dataTracking() {
 		return true;
 	}
 	
+	// EDX
+	else if( crUrl.indexOf('edx.org') > 0 ) {
+		// demo for https://learning.edx.org/course/course-v1:AdelaideX+BigDataX+3T2017/home
+		setTimeout(function(){
+			if( crUrl.indexOf('learning.edx.org/course') > 0 ) {
+				var npsBtn = '<a class="nav-item flex-shrink-0 nav-link" href="javascript:loadLeoFormNPS()" style="">NPS Survey</a>';
+				jQuery('#main-content > div.course-tabs-navigation.mb-3 > div > nav').append(jQuery(npsBtn));
+				
+				// 
+				if(jQuery('#unit-iframe').length === 1){
+					loadLeoFormCSAT();
+				}
+			}
+		},3000);
+		
+		//
+		leoTrackEventPageView();
+	}
+	
+	// VNUK
+	else if( crUrl.indexOf('vnuk.udn.vn') > 0 ) {
+		loadLeoFormCES();
+		leoTrackEventPageView();
+	}
+	
 	// news
 	else if (crUrl.indexOf('https://thanhnien.vn/') === 0 || crUrl.indexOf('https://vnexpress.net/') === 0 
 			|| crUrl.indexOf('https://tuoitre.vn/') === 0 || crUrl.indexOf('https://medium.com/') === 0 ) {
@@ -289,13 +298,36 @@ function leoTrackEventOrderCheckout(productIdList, idType) {
 	}
 }
 
-function leoTrackEventOnlinePurchasedOK(transactionId, purchasedItems, transactionValue, currencyCode) {
-	if( typeof transactionId === "string"  && typeof purchasedItems === "object" &&  typeof transactionValue === "number") {
-		currencyCode = (typeof currencyCode === "string") ? currencyCode : "USD";
-		transactionValue = transactionValue >= 0 ? transactionValue : 0;
-		console.log('leoTrackEventOnlinePurchasedOK', transactionId, purchasedItems, transactionValue, currencyCode)
-		LeoObserverProxy.recordConversionEvent("online-purchase", {} , transactionId, purchasedItems, transactionValue, currencyCode);
+function leoTrackEventOnlinePurchasedOK(transactionId, purchasedItems) {
+	if( typeof transactionId === "string"  && typeof purchasedItems === "object") {
+		console.log('leoTrackEventOnlinePurchasedOK', transactionId, purchasedItems)
+		LeoObserverProxy.recordConversionEvent("online-purchase", {} , transactionId, purchasedItems, -1, "USD");
 	} else {
 		console.log('Invalid params for leoTrackEventOnlinePurchasedOK')
 	}
+}
+
+function loadLeoFormCES(){
+	var svf = document.title;
+	var tprefurl = location.href;
+	var url  = 'https://demotrack.leocdp.net/webform?obsid=6BCKk58hUqutq2LN2VlBl2&tprefurl='+tprefurl+'&svf='+svf+'&svt=CES&_t='+new Date().getTime();
+	var iframe = '<div class="leocdp_iframe" > <iframe class="leocdp_iframe_small" src="'+url+'"></iframe> </div>';
+	jQuery('#kingster-page-wrapper > div.kingster-bottom-page-builder-container.kingster-container > div > div > div > div.kingster-single-social-share.kingster-item-rvpdlr').append(iframe)
+}
+
+function loadLeoFormCSAT(){
+	var svf = document.title;
+	var tprefurl = location.href;
+	var url  = 'https://demotrack.leocdp.net/webform?obsid=6BCKk58hUqutq2LN2VlBl2&tprefurl='+tprefurl+'&svf='+svf+'&svt=CSAT&_t='+new Date().getTime();
+	var iframe = '<div class="leocdp_iframe_container"> <iframe class="leocdp_iframe_responsive" src="'+url+'"></iframe> </div>';
+	
+	jQuery('div.unit-iframe-wrapper').append(iframe)
+}
+
+function loadLeoFormNPS(){
+	var svf = document.title;
+	var tprefurl = location.href;
+	var url = 'https://demotrack.leocdp.net/webform?obsid=6BCKk58hUqutq2LN2VlBl2&tprefurl='+tprefurl+'&svf='+svf+'&svt=NPS&_t='+new Date().getTime();
+	var iframe = '<div class="leocdp_iframe_container"> <iframe class="leocdp_iframe_responsive" src="'+url+'"></iframe> </div>';
+	jQuery('#main-content > div.container-fluid').html(iframe)
 }
