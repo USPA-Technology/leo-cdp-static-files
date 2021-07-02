@@ -16,6 +16,31 @@
 	color:#3300ff!important
 }
 
+.panel-marketing {
+    border-color: #28a4bd ;
+}
+.panel-marketing>.panel-heading {
+    color: #124954;
+    background-color: #c0e9f2;
+    border-color: #28a4bd;
+}
+.panel-business {
+    border-color: #8080ff ;
+}
+.panel-business>.panel-heading {
+    color: #0000CD;
+    background-color: #e6e6ff;
+    border-color: #8080ff;
+}
+.panel-cx {
+    border-color: #00b300 ;
+}
+.panel-cx>.panel-heading {
+    color: #008000;
+    background-color: #e6ffe6;
+    border-color: #00b300;
+}
+
 .venntooltip {
     font-size: 14px;
     position: absolute;
@@ -72,6 +97,30 @@ div.summary_metric {
 	align-items: center;
 	text-align: left;
 	padding: 0 10px 0 20px;
+}
+
+.profile_count {
+	background-color: lavender;
+ 	color: black;
+ 	font-size: 18px;
+ 	border-radius: 8px;
+ 	padding: 4px;
+ 	width: 94%;
+ 	margin: auto;
+}
+
+.radio-inline {
+	background-color: lavender;
+    border-radius: 4px;
+    font-weight: bold;
+   
+    font-size: 1.1em;
+}
+.radio-inline-selected {
+	background-color: #ffffcc;
+	padding: 4px;
+	margin-left: 20px!important;
+	border: 1px solid;
 }
 
 .bar {
@@ -352,8 +401,8 @@ div.gridholder {
 }
 
 .control-label {
-	padding-top: 7px;
-    margin-bottom: 0;
+	padding-top: 9px;
+    margin-bottom: 2px;
     text-align: right;
 }
 
@@ -370,7 +419,7 @@ div.gridholder {
 	background-color: #FFF8DC;
     color: #0000CD;
     border-radius: 6px;
-    padding: 5px;
+    padding: 6px;
     font-weight: bold;
     overflow: hidden;
 }
@@ -418,8 +467,16 @@ div.gridholder {
 
 .event_text {
 	text-align: center;
-    font-size: 11px;
+    color: blue;
     font-weight: bold;
+}
+
+div.long_url_holder {
+	white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
 }
 
 .scoring_field {
@@ -429,7 +486,6 @@ div.gridholder {
 	 font-weight: bold;
 	 padding: 5px;
 	 border-radius: 7px;
-	 width: 42%;
 }
 .scoring_field_profit {
 	 background-color: #D6F0E1;
@@ -438,7 +494,6 @@ div.gridholder {
 	 font-weight: bold;
 	 padding: 5px;
 	 border-radius: 7px;
-	 width: 42%;
 }
 .scoring_field_experience {
 	 background-color: #FFE1A1;
@@ -447,7 +502,6 @@ div.gridholder {
 	 font-weight: bold;
 	 padding: 5px;
 	 border-radius: 7px;
-	 width: 42%;
 }
 .scoring_field_credit {
 	 background-color: #E8DAEF;
@@ -456,7 +510,6 @@ div.gridholder {
 	 font-weight: bold;
 	 padding: 5px;
 	 border-radius: 7px;
-	 width: 42%;
 }
 
 .data_field {
