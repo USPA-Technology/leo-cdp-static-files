@@ -6,7 +6,8 @@
     lang = lang || 'us';
 
     // FIXME
-    var cdnUrl = 'https://cdn.jsdelivr.net/gh/USPA-Technology/leo-cdp-static-files/js/leo-form/';
+    var cdnUrl = window.leoFormBaseUrl || 'https://cdn.jsdelivr.net/gh/USPA-Technology/leo-cdp-static-files/js/leo-form/';
+    
     var formSchemaUrl = cdnUrl + 'leo.form.iframe.' + lang + '.js';
     var jsForm = '<script src="' + formSchemaUrl + '"><\/script>'
 

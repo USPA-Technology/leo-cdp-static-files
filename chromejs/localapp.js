@@ -19,7 +19,7 @@ function addLeoCdpPurchasingButton(source, productId, idType, selector) {
 	holderNode.prepend('<style> '+ leoBuyBtnStyle + '</style>');
 	holderNode.prepend('<div id="leo_test_holder" style="padding:20px;text-align:right;"></div>');
 	
-	var btn = jQuery('<button class="leocdp_buy_btn" type="button" onclick="leoPurchasingSimulation(this)" style="background-color: #4CAF50" > LEO CDP - Purchasing Simulation Test Button </button> ');
+	var btn = jQuery('<button class="leocdp_buy_btn" type="button" onclick="leoPurchasingSimulation(this)" style="background-color: #4CAF50" >Buy Button <br>(LEO CDP)</button> ');
 	btn.data('source',source);
 	btn.data('productId',productId);
 	btn.data('idType',idType);
@@ -87,7 +87,17 @@ function dataTracking() {
 					
 					localStorage.setItem('sessionProductId',productId)
 					localStorage.setItem('sessionIdType',idType)
-				})
+				});
+				
+				jQuery('#title').append('<div id="cx_demo"></div>')
+				
+				addFeedbackPlugin('cx_demo');
+				
+				var btnSelector = jQuery('#buyNow').parent().empty();
+				if(btnSelector.length === 0){
+					btnSelector = jQuery('#checkoutButtonId').parent();
+				}
+				addLeoCdpPurchasingButton('amazon', productId, idType, btnSelector);
 				
 			} else {
 				leoTrackEventPageView();
@@ -250,6 +260,12 @@ function dataTracking() {
 			var arr = location.href.split('v=');
 			if(arr.length > 0) {
 				var videoId = arr[1].trim();
+				
+				if("G6eeR7wd58w" === videoId){
+					var aNode = jQuery('<br> <a style="color:yellow" />').text("Aqua City").attr("href","https://datahub4talentnet.leocdp.net/ct/2nAhK6vM4doyZy9rZrMNjd");
+					jQuery('h1[class="title style-scope ytd-video-primary-info-renderer"]').append(aNode);
+				}
+				
 				var eventData = {"videoId": videoId,"idType":idType};
 				
 				leoTrackEventContentView(eventData);
@@ -299,11 +315,50 @@ function dataTracking() {
 				LeoObserverProxy.recordViewEvent("join-workshop", eventData);
 			}
 		}
-		
-		
 	}
 	
-	// news
+	// klook.com
+	else if( crUrl.indexOf('klook.com') > 0 ) {
+		var content = jQuery('meta[property="og:type"]').attr('content');
+		var ldNodes = $('script[type="application/ld+json"]');
+		
+		if(content === "product" && ldNodes.length > 0){
+
+			var idType = 'SKU';
+			var productId = jQuery('meta[name="twitter:app:url:iphone"]').attr("content").replace('klook://activity/','');
+			window.srcTouchpointName = encodeURIComponent(productMetadata.name);
+			leoTrackEventProductView([productId], idType);	
+		}
+		else {
+			leoTrackEventPageView();
+		}
+	}
+	
+	// ticketmaster.com
+	else if( crUrl.indexOf('ticketmaster.com') > 0 ) {
+		leoTrackEventPageView();
+	}
+	
+	// aquacity.com.vn
+	else if( crUrl.indexOf('aquacity.com.vn') > 0 ) {
+		leoTrackEventPageView();
+	}
+	
+	// --------- NEWS -----------
+	
+	// https://lifestyle.vn/nam-truffle-sieu-dat-do-am-thuc-thuong-luu-va-gioi-hoang-toc/
+	else if( crUrl.indexOf('lifestyle.vn') > 0 ) {
+		leoTrackEventPageView();
+		showRecommenderBox(".td-is-sticky")
+	}
+	
+	
+	// https://vn.yahoo.com/
+	else if( crUrl.indexOf('vn.yahoo.com') > 0 ) {
+		leoTrackEventPageView();
+		showRecommenderBox("#Aside")
+	}
+
 	else if (crUrl.indexOf('https://thanhnien.vn/') === 0 || crUrl.indexOf('https://vnexpress.net/') === 0 
 			|| crUrl.indexOf('https://tuoitre.vn/') === 0 || crUrl.indexOf('https://medium.com/') === 0 ) {
 		// pageview tracking
@@ -511,4 +566,56 @@ function getIndexDomNode(node) {
 		}
 	}
 	return i;
+}
+
+function showRecommenderBox(selectorStr){
+	setTimeout(function(){
+		LeoObserverProxy.synchLeoVisitorId(function(vid) {
+			// url
+			var cb = Math.floor(Math.random() * 100000);
+			var src = "https://demotrack.leocdp.net/ris/html/products?visid=" + vid;
+			src += ("&tpurl=" + encodeURIComponent(location.href) );
+			src += ("&cb=" + cb );
+			// width and height
+			var h = '700px';
+			var w = '300px';
+			// append DOM
+			var f = document.createElement('iframe');
+			f.setAttribute("src", src);
+			f.setAttribute("style", "width:"+w+"; height:"+h+"; overflow-y:scroll; margin:auto; display:block; border:none;");
+			f.setAttribute("frameBorder", "0");
+			var s = document.getElementById('leo_recommender_box');
+		    s.parentNode.insertBefore(f, s);
+		})
+	},860);
+	var s = jQuery(selectorStr).empty().append(jQuery('<div id="leo_recommender_box" ></div>'));
+	s.css("background-color","#fff").css("position","sticky").css("top","90px")
+}
+
+function addFeedbackPlugin(domId){
+	//  Feedback/Survey Form Collector for Customer Feedback Score (CFS) form
+    var svf = document.title;
+	var tprefurl = location.href;
+	var tplFeedbackType = "RATING";
+	
+	var url  = 'https://datahub4talentnet.leocdp.net/webform?tplid=3fAuyEgUn0OncHFlO7tnxu';
+	url = url + "&tplfbt=" + tplFeedbackType;
+	url = url + "&tpname=" + encodeURIComponent(document.title);
+	url = url + "&tpurl=" + encodeURIComponent(location.href);
+	url = url + "&cb=" + new Date().getTime();
+	
+	// container
+	var divWrapper = document.createElement("div"); 
+	var cssDiv = "position: relative; width:100%; overflow: hidden;  height: 100px ";
+	divWrapper.setAttribute("style",cssDiv);
+	
+	// iframe 
+	var iframe = document.createElement("iframe"); 
+	var cssIframe = "position: absolute; top:0; left:0; bottom:0; right:0; width:100%; border: none; overflow: hidden; height: 100px ";
+	iframe.setAttribute("style",cssIframe);
+	iframe.setAttribute("src",url);
+	divWrapper.appendChild(iframe);
+	
+	var referenceNode = document.getElementById(domId);
+	referenceNode.parentNode.insertBefore(divWrapper, referenceNode.nextSibling);
 }
