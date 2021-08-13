@@ -38,11 +38,11 @@ function leoPurchasingSimulation(node){
 	jQuery(node).attr('disabled','disabled').css('background-color','#696969');
 	console.log("leoPurchasingSimulation",source, productId, idType)
 	
-	var transactionId, purchasedItems;
+	var transactionId, shoppingCartItems;
 	source = source.toUpperCase()
 	transactionId = source+ "_demo_"+ new Date().getTime();
-	purchasedItems = [{"itemtId": productId, "idType" : idType, quantity : 1}];
-	leoTrackEventPurchasedOK(transactionId, purchasedItems);
+	shoppingCartItems = [{"itemtId": productId, "idType" : idType, quantity : 1}];
+	leoTrackEventPurchasedOK(transactionId, shoppingCartItems);
 	alert(' leoPurchasingSimulation source ' + source + ' transactionId ' + transactionId);
 }
 
@@ -133,6 +133,10 @@ function dataTracking() {
 					leoTrackEventProductView([productId], idType);
 					
 					addLeoCdpPurchasingButton('netabooks', productId, idType, $('a.btn-buy').parent());
+					
+					jQuery(".btn-addmore").click(function(){
+						leoTrackEventAddToCart([productId], idType);
+					})
 				}
 			});
 		} 
@@ -397,7 +401,7 @@ function leoObserverProxyReady(session) {
 	window.srcTouchpointName = encodeURIComponent(document.title);
 	window.srcTouchpointUrl = encodeURIComponent(location.href);
 
-	var leoproxyJsPath = '/js/leo-observer/leo.proxy.min.js';
+	var leoproxyJsPath = '/js/leo-observer/leo.proxy.js';
     var src = location.protocol + '//' + window.leoObserverCdnDomain + leoproxyJsPath;
     var jsNode = document.createElement('script');
     jsNode.async = true;
@@ -441,11 +445,15 @@ function leoTrackEventLikeProduct(productIdList, idType) {
 }
 
 function leoTrackEventAddToCart(productIdList, idType) {
-	if(typeof productIdList === "object" && typeof idType === "string" ) {
+	if(typeof productIdList === "object" && typeof idType === "string" ) {		
 		var productIds = productIdList.join(";");
 		var eventData = {"productIds": productIds, "idType":idType};
-		console.log('leoTrackEventAddToCart', eventData)
-		LeoObserverProxy.recordActionEvent("add-to-cart", eventData);
+		var shoppingCartItems = [];
+		productIdList.forEach(function(productId) {
+			shoppingCartItems.push({"itemtId": productId, "idType" : idType, quantity : 1})
+		})
+		LeoObserverProxy.recordConversionEvent("add-to-cart", eventData , "", shoppingCartItems, 0, "USD");
+		console.log('leoTrackEventAddToCart', shoppingCartItems)
 	} else {
 		console.log('Invalid params for leoTrackEventAddToCart')
 	}
@@ -455,17 +463,21 @@ function leoTrackEventOrderCheckout(productIdList, idType) {
 	if(typeof productIdList === "object" && typeof idType === "string" ) {
 		var productIds = productIdList.join(";");
 		var eventData = {"productIds": productIds, "idType":idType};
-		console.log('leoTrackEventOrderCheckout', eventData)
-		LeoObserverProxy.recordActionEvent("order-checkout", eventData);
+		var shoppingCartItems = [];
+		productIdList.forEach(function(productId) {
+			shoppingCartItems.push({"itemtId": productId, "idType" : idType, quantity : 1})
+		})
+		LeoObserverProxy.recordConversionEvent("order-checkout", eventData , "", shoppingCartItems, -1, "USD");
+		console.log('leoTrackEventOrderCheckout', shoppingCartItems)
 	} else {
 		console.log('Invalid params for leoTrackEventOrderCheckout')
 	}
 }
 
-function leoTrackEventPurchasedOK(transactionId, purchasedItems) {
-	if( typeof transactionId === "string"  && typeof purchasedItems === "object") {
-		console.log('leoTrackEventPurchasedOK', transactionId, purchasedItems)
-		LeoObserverProxy.recordConversionEvent("purchase", {} , transactionId, purchasedItems, -1, "USD");
+function leoTrackEventPurchasedOK(transactionId, shoppingCartItems) {
+	if( typeof transactionId === "string"  && typeof shoppingCartItems === "object") {
+		console.log('leoTrackEventPurchasedOK', transactionId, shoppingCartItems)
+		LeoObserverProxy.recordConversionEvent("purchase", {} , transactionId, shoppingCartItems, -1, "USD");
 	} else {
 		console.log('Invalid params for leoTrackEventPurchasedOK')
 	}
