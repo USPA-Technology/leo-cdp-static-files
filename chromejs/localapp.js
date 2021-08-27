@@ -80,7 +80,7 @@ function dataTracking() {
 				leoTrackEventProductView([productId], idType);
 				
 				jQuery('#add-to-wishlist-button-submit').click(function(){
-					leoTrackEventLikeProduct([productId], idType)
+					leoTrackEventAddWishList([productId], idType)
 				})
 				jQuery('#add-to-cart-button').click(function(){
 					leoTrackEventAddToCart([productId], idType)
@@ -433,18 +433,23 @@ function leoTrackEventProductView(productIdList, idType) {
 	}
 }
 
-function leoTrackEventLikeProduct(productIdList, idType) {
-	if(typeof productIdList === "object" && typeof idType === "string") {
+function leoTrackEventAddWishList(productIdList, idType) {
+	if(typeof productIdList === "object" && typeof idType === "string" ) {		
 		var productIds = productIdList.join(";");
 		var eventData = {"productIds": productIds, "idType":idType};
-		console.log('leoTrackEventLikeProduct', eventData)
-		LeoObserverProxy.recordActionEvent("like", eventData);
+		var shoppingCartItems = [];
+		productIdList.forEach(function(productId) {
+			shoppingCartItems.push({"itemtId": productId, "idType" : idType, quantity : 1})
+		})
+		LeoObserverProxy.recordConversionEvent("add-wishlist", eventData , "", shoppingCartItems, 0, "USD");
+		console.log('leoTrackEventAddToCart', shoppingCartItems)
 	} else {
-		console.log('Invalid params for leoTrackEventLikeProduct')
+		console.log('Invalid params for leoTrackEventAddToCart')
 	}
 }
 
-function leoTrackEventAddToCart(productIdList, idType) {
+function leoTrackEventAddToCart(productIdList, idType, quantityNum) {
+	quantityNum = typeof quantityNum === "number" ? quantityNum : 1;
 	if(typeof productIdList === "object" && typeof idType === "string" ) {		
 		var productIds = productIdList.join(";");
 		var eventData = {"productIds": productIds, "idType":idType};
@@ -459,7 +464,8 @@ function leoTrackEventAddToCart(productIdList, idType) {
 	}
 }
 
-function leoTrackEventOrderCheckout(productIdList, idType) {
+function leoTrackEventOrderCheckout(productIdList, idType, quantityNum) {
+	quantityNum = typeof quantityNum === "number" ? quantityNum : 1;
 	if(typeof productIdList === "object" && typeof idType === "string" ) {
 		var productIds = productIdList.join(";");
 		var eventData = {"productIds": productIds, "idType":idType};
