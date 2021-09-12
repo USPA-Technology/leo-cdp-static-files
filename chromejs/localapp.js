@@ -266,7 +266,7 @@ function dataTracking() {
 				var videoId = arr[1].trim();
 				
 				if("G6eeR7wd58w" === videoId){
-					var aNode = jQuery('<br> <a style="color:yellow" />').text("Aqua City").attr("href","https://datahub4talentnet.leocdp.net/ct/2nAhK6vM4doyZy9rZrMNjd");
+					var aNode = jQuery('<br> <a style="color:yellow" />').text("Aqua City").attr("href","https://demotrack.leocdp.net/ct/2nAhK6vM4doyZy9rZrMNjd");
 					jQuery('h1[class="title style-scope ytd-video-primary-info-renderer"]').append(aNode);
 				}
 				
@@ -386,8 +386,8 @@ function leoObserverProxyReady(session) {
 
 (function() {
     // LEO Web Code for channel: Affiliate Marketing
-	window.leoObserverLogDomain = "datahub4talentnet.leocdp.net";
-	window.leoObserverCdnDomain = "datahub4talentnet.leocdp.net/public";
+	window.leoObserverLogDomain = "demotrack.leocdp.net";
+	window.leoObserverCdnDomain = "demotrack.leocdp.net/public";
 	
 	if(location.hostname.indexOf("talentnet.vn")>=0){
 		window.leoObserverId = "4FCDZnHwU4EaNyYkRe8JLU";
@@ -616,7 +616,7 @@ function addFeedbackPlugin(domId){
 	var tprefurl = location.href;
 	var tplFeedbackType = "RATING";
 	
-	var url  = 'https://datahub4talentnet.leocdp.net/webform?tplid=3fAuyEgUn0OncHFlO7tnxu';
+	var url  = 'https://demotrack.leocdp.net/webform?tplid=3fAuyEgUn0OncHFlO7tnxu';
 	url = url + "&tplfbt=" + tplFeedbackType;
 	url = url + "&tpname=" + encodeURIComponent(document.title);
 	url = url + "&tpurl=" + encodeURIComponent(location.href);
