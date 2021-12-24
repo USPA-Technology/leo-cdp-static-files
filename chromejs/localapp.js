@@ -265,25 +265,6 @@ function dataTracking() {
 		return true;
 	}
 	
-	// ACFC
-	else if (crUrl.indexOf('https://www.acfc.com.vn') === 0) {
-		
-		if(crUrl.indexOf('.html') > 0 ) {
-			var idType = 'SKU';
-			var productId = jQuery('div[itemprop="sku"]').text().trim();
-			if(productId !== '' ) {
-				
-				leoTrackEventProductView([productId], idType);
-				
-				jQuery('#product-addtocart-button').click(function(){
-					leoTrackEventAddToCart([productId], idType)
-				});
-			}
-		} else {
-			leoTrackEventPageView();
-		}
-		return true;
-	}
 	
 	// Phong Vu
 	else if (crUrl.indexOf('https://phongvu.vn') === 0) {
@@ -355,11 +336,6 @@ function dataTracking() {
 		leoTrackEventPageView();
 	}
 	
-	// VNUK
-	else if( crUrl.indexOf('vnuk.udn.vn') > 0 ) {
-		loadLeoFormCES();
-		leoTrackEventPageView();
-	}
 	
 	// talentnet
 	else if( crUrl.indexOf('talentnet.vn') > 0 ) {
