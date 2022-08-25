@@ -41,7 +41,7 @@ window.totalRatingQuestions = 0;
 // init global data
 var formSchema = {}, formModel = [], callbacks = [];
 
-function initFeedbackSurvey(){
+function initFeedbackSurvey(initFeedbackSurveyCallback) {
 	var model = JSON.parse($('#surveyJsonMetaData').val());
 	model.Rating_Question_List = typeof model.Rating_Question_List === "object" ? model.Rating_Question_List : [];
 	// set as global var
@@ -579,6 +579,11 @@ function initFeedbackSurvey(){
 	$("div.radio label").each(function(){ 
 		var text = $(this).html(); $(this).html( marked.parseInline(text) ) 
 	})
+	
+	// end initFeedbackSurvey, call initFeedbackSurveyCallback
+	if(typeof initFeedbackSurveyCallback === "function") {
+		initFeedbackSurveyCallback();
+	}
 }
 
 (function() {
