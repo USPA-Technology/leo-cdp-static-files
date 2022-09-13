@@ -1,5 +1,7 @@
 # leocdp-static-files
-Public static files for Leo CDP (Customer Data Platform)
+
+* Public static files for Leo CDP (Customer Data Platform)
+* For the LEO CDP deployment, check this https://github.com/trieu/leo-cdp-free-edition
 
 ## How to get JS file in this repo with CDN https://jsdelivr.com
 
