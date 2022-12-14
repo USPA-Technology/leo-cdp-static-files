@@ -403,7 +403,7 @@
     
         var sankey = d3.sankey()
             .nodeWidth(16)
-            .nodePadding(25)
+            .nodePadding(20)
             .extent([ [0, 0], [dimensions.width, dimensions.height]
         ]);
     
@@ -496,6 +496,8 @@
         };
     
         tipNodes.html(function(d) {
+        	console.log("tipNode ", d )
+        	
             var nodeName = d.name;
             var linksFrom = d.targetLinks; //invert for reference
             var linksTo = d.sourceLinks;
@@ -508,7 +510,7 @@
                 html += '<tr><td><h2>' + configSankey.tooltip.labelSource + '</h2></td><td></td></tr>'
             }
             for (i = 0; i < linksFrom.length; ++i) {
-				// console.log("linksFrom[i] ", linksFrom[i])
+				console.log("linksFrom[i].source ", linksFrom[i].source)
                 html += '<tr>' +
                     '<td class="col-left">' + linksFrom[i].source.name + '</td>' +
                   //  '<td align="right">' + _formatValueTooltip(nodeName, linksFrom[i].target.value) + '</td>' +
@@ -518,7 +520,7 @@
                 html += '<tr><td></td><td></td><tr><td></td><td></td> </tr><tr><td><h2>' + configSankey.tooltip.labelTarget + '</h2></td><td></td></tr>'
             }
             for (i = 0; i < linksTo.length; ++i) {
-				// console.log("linksTo[i] ", linksTo[i])
+				console.log("linksTo[i].target ", linksTo[i].target)
                 html += '<tr>' +
                     '<td class="col-left">' + linksTo[i].target.name + '</td>' +
                  //   '<td align="right">' + _formatValueTooltip(nodeName, linksTo[i].source.value) + '</td>' +
@@ -595,7 +597,7 @@
                 d.y0 = Math.max(0, Math.min(dimensions.height - (d.y1 - d.y0), d.y0 + d3.event.dy));
                 d.y1 = d.y0 + heightNode;
             }
-            var y = d.y0 - 8;
+            var y = d.y0 ;
             d3.select(this).attr("transform", "translate(" + d.x0 + "," + y + ")");
             sankey.update(_dataSankey);
             link.attr("d", path);
@@ -628,7 +630,7 @@
     
         node.append("rect")
             .attr("height", function(d) {
-                return Math.max(16, (d.y1 - d.y0) );
+                return Math.max(10, (d.y1 - d.y0) );
             })
             .attr("width", sankey.nodeWidth())
             .style("fill", function(d) {
