@@ -550,7 +550,6 @@ img {
 }
 
 #page-wrapper {
-	
 	float: right;
 }
 
@@ -690,7 +689,7 @@ ul.alert-dropdown {
 		position: fixed;
 		top: 51px;
 		left: 198px;
-    	width: 216px;
+    	width: 208px;
 		height: 100%;
 		margin-left: -200px;
 		padding-bottom: 60px;
