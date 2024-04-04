@@ -1555,7 +1555,7 @@ translateX
 .navbar-brand {
 	position: relative;
 	display: inline-block;
-	padding: 0 2.2%;
+	padding: 0 1.6%;
 	min-height: 50px !important;
 }
 
@@ -1575,9 +1575,9 @@ ul#publisher_categories {
 
 #logo-img {
 	display: inline-block;
-	max-height: 46px;
-	line-height: 50px;
-	margin: 3px 9px 0 8px;
+    max-height: 47px;
+    line-height: 50px;
+    margin: 2px 7px 0 0px;
 }
 
 #add_script_wrap {
